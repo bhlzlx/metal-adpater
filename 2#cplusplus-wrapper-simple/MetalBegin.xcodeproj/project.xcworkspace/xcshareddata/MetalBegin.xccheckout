@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>059A3919-64E7-4829-A44A-3AC2CC3BA485</string>
+	<key>IDESourceControlProjectName</key>
+	<string>MetalBegin</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>DA6F3E04EC508714B985EED8F80420EFCBBBBAAA</key>
+		<string>https://github.com/bhlzlx/metal-adpater.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>2#cplusplus-wrapper-simple/MetalBegin.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>DA6F3E04EC508714B985EED8F80420EFCBBBBAAA</key>
+		<string>../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/bhlzlx/metal-adpater.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>DA6F3E04EC508714B985EED8F80420EFCBBBBAAA</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>DA6F3E04EC508714B985EED8F80420EFCBBBBAAA</string>
+			<key>IDESourceControlWCCName</key>
+			<string>metal-adpater</string>
+		</dict>
+	</array>
+</dict>
+</plist>

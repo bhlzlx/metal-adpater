@@ -254,7 +254,6 @@ void DeviceMTL::SetCurrentRenderPipeline(IGXRenderPipeline * pipeline)
 
 IGXRenderPipeline * DeviceMTL::CreateCustomRenderPipeline(GX_RENDERPIPELINE_DESC * _pDesc)
 {
-    
     return nullptr;
 }
 
@@ -275,7 +274,6 @@ IGXRenderPipeline * DeviceMTL::CreateDefaultRenderPipeline(GX_RENDERPIPELINE_DES
     
     return pRenderPipeline;
 }
-
 
 IGXEffect* DeviceMTL::CreateEffect(GX_EFFECT_DESC * _pDesc)
 {
@@ -320,7 +318,6 @@ IGXEffect* DeviceMTL::CreateEffect(GX_EFFECT_DESC * _pDesc)
     return pEffect;
 }
 
-
 IGXRenderPipeline * DeviceMTL::GetCurrentRenderPipeline()
 {
     return m_pCurrentPipeline;
@@ -336,9 +333,10 @@ IGXEffect* DeviceMTL::GetCurrentEffect()
     return m_pCurrentEffect;
 }
 
-
-
-
+void DeviceMTL::OnResize(GX_UINT16 nWidth,GX_UINT16 nHeight)
+{
+    [this->m_metalLayer setFrame: CGRectMake(0, 0, nWidth, nHeight)];
+}
 
 void DeviceMTL::FlushDrawing()
 {

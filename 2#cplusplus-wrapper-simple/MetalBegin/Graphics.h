@@ -339,6 +339,7 @@ struct IGXDevice
     virtual void SetCurrentEffect(IGXEffect * pEffect) = 0;
     virtual IGXEffect* GetCurrentEffect() = 0;
     
+    virtual void OnResize(GX_UINT16 nWidth,GX_UINT16 nHeight) = 0;
     
     virtual void FlushDrawing() = 0;
     

@@ -53,8 +53,6 @@ static const float vertices[18] =
     _pDevice->SetViewport(&viewportRect);
     _pDevice->SetScissor(&scissorRect);
     
-    
-    
     static GX_RENDERPIPELINE_DESC renderPipelineDesc;
     static GX_RENDERTARGET_DESC renderTargetDesc;
     static GX_DEPTH_STENCIL_DESC depthStencilDesc;
@@ -96,8 +94,6 @@ static const float vertices[18] =
     
     _pVBO = _pDevice->CreateVBO(vertices, sizeof(vertices));
 
-
-    
     [self _setupMetal];
     [self onUpdate:nil];
     // _gameloop 会在每个runloop循环执行一次
@@ -105,37 +101,10 @@ static const float vertices[18] =
     [_timer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
     _inflight_semaphore = dispatch_semaphore_create(3);
     */
-    
 }
 
 - (void)_setupMetal
 {
-    /*
-    // 初始化shader function
-    _vertexFunc = [_library newFunctionWithName:@"vertex_shader"];
-    _fragmentFunc = [_library newFunctionWithName:@"fragment_shader"];
-    // 模型VBO
-    _modelVBO = [_device newBufferWithBytes:vertices length:sizeof(vertices) options:MTLResourceOptionCPUCacheModeDefault];
-    // 初始化渲染管线
-    MTLRenderPipelineDescriptor * pipelineDesc = [[MTLRenderPipelineDescriptor alloc] init];
-    // 设置（多重）采样数，不设置就设为1
-    pipelineDesc.sampleCount = 1;
-    pipelineDesc.vertexFunction = _vertexFunc;
-    pipelineDesc.fragmentFunction = _fragmentFunc;
-    pipelineDesc.colorAttachments[0].pixelFormat = MTLPixelFormatBGRA8Unorm;
-    pipelineDesc.depthAttachmentPixelFormat = MTLPixelFormatDepth32Float;
-    NSError * error;
-    _renderPipelineState = [_device newRenderPipelineStateWithDescriptor:pipelineDesc error:&error];
-    if(_renderPipelineState == nil)
-    {
-        NSLog(@"failed to create render pipeline state~ error : %@",error.description);
-    }
-    // 设置深度缓冲区的可读写状态
-    MTLDepthStencilDescriptor * depthStencilDesc = [[MTLDepthStencilDescriptor alloc] init];
-    [depthStencilDesc setDepthCompareFunction:MTLCompareFunctionLessEqual];
-    [depthStencilDesc setDepthWriteEnabled:YES];
-    _depthStencilState = [_device newDepthStencilStateWithDescriptor:depthStencilDesc];
-     */
 }
 
 - (void)_render
@@ -196,8 +165,6 @@ static const float vertices[18] =
     
 }
 
-
-
 - (void)_reshape
 {
     // When reshape is called, update the view and projection matricies since this means the view orientation or size changed
@@ -230,14 +197,14 @@ static const float vertices[18] =
     }
 }
 */
+
 // Called whenever view changes orientation or layout is changed
-/*
+
 - (void)viewDidLayoutSubviews
 {
-    _layerSizeShouldUpdate = YES;
-    [_metalLayer setFrame:self.view.layer.frame];
+    CGRect rect = [self.view bounds];
+    _pDevice->OnResize(rect.size.width, rect.size.height);
 }
- */
 
 @end
 

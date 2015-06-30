@@ -74,6 +74,8 @@ struct DeviceMTL : public IGXDevice
     void SetScissor(const GX_RECT * _pScissor);
     void SetViewport(const GX_RECT * _pViewport);
     
+    void OnResize(GX_UINT16 nWidth,GX_UINT16 nHeight);
+    
     void FlushDrawing();
 
     void Release();
