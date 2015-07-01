@@ -40,8 +40,9 @@ void EffectMTL::SetVertexSamplerState(GX_SAMPLER_STATE * _pSamplerState,GX_UINT3
     desc.sAddressMode = AddressMode2MTL(_pSamplerState->AddressU);
     desc.tAddressMode = AddressMode2MTL(_pSamplerState->AddressV);
     id<MTLSamplerState> samplerState = [device newSamplerStateWithDescriptor:desc];
-    
     [pCurrentPipeline->m_renderCmdEncoder setVertexSamplerState:samplerState atIndex:_index];
+    [samplerState release];
+    [desc release];
 }
 
 void EffectMTL::SetVertexTexture(IGXTex * _pTexture,GX_UINT32 _index)
@@ -132,4 +133,13 @@ GX_BOOL EffectMTL::Begin()
 GX_BOOL EffectMTL::End()
 {
     return GX_TRUE;
+}
+
+
+void EffectMTL::Release()
+{
+    [library release];
+    [renderPipelineDesc release];
+    [renderPipelineState release];
+    [depthStencilState release];
 }

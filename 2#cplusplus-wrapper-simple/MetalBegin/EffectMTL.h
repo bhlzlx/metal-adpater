@@ -32,6 +32,8 @@ struct EffectMTL : public IGXEffect
     
     GX_BOOL Begin();
     GX_BOOL End();
+    
+    void Release();
 };
 
 #endif /* defined(__MetalBegin__EffectMTL__) */

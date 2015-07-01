@@ -16,7 +16,6 @@
 		FB560B161B395EAD000B7B1B /* shader.metal in Sources */ = {isa = PBXBuildFile; fileRef = FB560B151B395EAD000B7B1B /* shader.metal */; };
 		FB560B1E1B3A8261000B7B1B /* MTLDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB560B1C1B3A8261000B7B1B /* MTLDevice.mm */; };
 		FB560B271B3AA239000B7B1B /* MTLBuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB560B261B3AA239000B7B1B /* MTLBuffer.mm */; };
-		FB560B2A1B3AA25B000B7B1B /* MTLEffect.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB560B281B3AA25B000B7B1B /* MTLEffect.mm */; };
 		FB560B311B3AADA8000B7B1B /* MTLTexture.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB560B2F1B3AADA8000B7B1B /* MTLTexture.mm */; };
 		FB560B351B3BE817000B7B1B /* MTLRenderPipeline.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB560B331B3BE817000B7B1B /* MTLRenderPipeline.mm */; };
 		FBC98E691B3D2798001C4D0E /* EffectMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = FBC98E671B3D2798001C4D0E /* EffectMTL.mm */; };
@@ -50,8 +49,6 @@
 		FB560B1D1B3A8261000B7B1B /* MTLDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLDevice.h; path = core/MTLDevice.h; sourceTree = "<group>"; };
 		FB560B251B3AA239000B7B1B /* MTLBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLBuffer.h; path = core/MTLBuffer.h; sourceTree = "<group>"; };
 		FB560B261B3AA239000B7B1B /* MTLBuffer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLBuffer.mm; path = core/MTLBuffer.mm; sourceTree = "<group>"; };
-		FB560B281B3AA25B000B7B1B /* MTLEffect.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLEffect.mm; path = core/MTLEffect.mm; sourceTree = "<group>"; };
-		FB560B291B3AA25B000B7B1B /* MTLEffect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLEffect.h; path = core/MTLEffect.h; sourceTree = "<group>"; };
 		FB560B2B1B3AA531000B7B1B /* DeviceMTL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DeviceMTL.h; path = core/DeviceMTL.h; sourceTree = "<group>"; };
 		FB560B2F1B3AADA8000B7B1B /* MTLTexture.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLTexture.mm; path = core/MTLTexture.mm; sourceTree = "<group>"; };
 		FB560B301B3AADA8000B7B1B /* MTLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLTexture.h; path = core/MTLTexture.h; sourceTree = "<group>"; };
@@ -178,8 +175,6 @@
 			children = (
 				FB560B2F1B3AADA8000B7B1B /* MTLTexture.mm */,
 				FB560B301B3AADA8000B7B1B /* MTLTexture.h */,
-				FB560B281B3AA25B000B7B1B /* MTLEffect.mm */,
-				FB560B291B3AA25B000B7B1B /* MTLEffect.h */,
 				FB560B251B3AA239000B7B1B /* MTLBuffer.h */,
 				FB560B261B3AA239000B7B1B /* MTLBuffer.mm */,
 				FB560B1C1B3A8261000B7B1B /* MTLDevice.mm */,
@@ -299,7 +294,6 @@
 				FB560AEF1B394EF9000B7B1B /* AppDelegate.mm in Sources */,
 				FB560B111B394F6C000B7B1B /* MTLGameViewController.mm in Sources */,
 				FB560B351B3BE817000B7B1B /* MTLRenderPipeline.mm in Sources */,
-				FB560B2A1B3AA25B000B7B1B /* MTLEffect.mm in Sources */,
 				FB560B1E1B3A8261000B7B1B /* MTLDevice.mm in Sources */,
 				FB560B311B3AADA8000B7B1B /* MTLTexture.mm in Sources */,
 				FB560AEC1B394EF9000B7B1B /* main.m in Sources */,
@@ -424,7 +418,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = MetalBegin/Info.plist;
@@ -438,7 +432,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_ARC = NO;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = MetalBegin/Info.plist;

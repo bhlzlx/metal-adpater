@@ -13,7 +13,6 @@
 #import <QuartzCore/CAMetalLayer.h>
 #include "DeviceMTL.h"
 #include "MTLBuffer.h"
-#include "MTLEffect.h"
 
 __block void OnCommandBufferCommitted(id<MTLCommandBuffer> commandBuffer);
 

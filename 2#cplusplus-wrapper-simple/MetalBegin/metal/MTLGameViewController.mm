@@ -26,10 +26,19 @@ static const float vertices[18] =
 
 @implementation MTLGameViewController
 {
+    
 }
 
 - (void)dealloc
 {
+    _pDevice->Release();
+    _pEffect->Release();
+    _pDepthStencil->Release();
+    _pRenderTarget->Release();
+    _pRenderPipeline->Release();
+    _pVBO->Release();
+    [_timer release];
+    [super dealloc];
 }
 
 -(void)onInit
@@ -42,7 +51,7 @@ static const float vertices[18] =
     self.view.opaque = YES;
     self.view.backgroundColor = [UIColor purpleColor];
     screenScale = self.view.contentScaleFactor = [[UIScreen mainScreen] scale];
-    _pDevice = CreateDevice((__bridge void * )metalLayer);
+    _pDevice = CreateDevice((void * )metalLayer);
     
     static GX_RECT viewportRect;
     static GX_RECT scissorRect;

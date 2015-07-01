@@ -116,6 +116,10 @@ MTLPrimitiveType PrimitiveType2MTL(GX_DRAW _drawType)
 
 void DeviceMTL::Release()
 {
+    [m_mtlDevice release];
+    [m_mtlCmdQueue release];
+    [m_mtlDefaultCmdBuffer release];
+    [m_metalLayer release];
     m_mtlDevice = nil;
     delete this;
 }
@@ -129,7 +133,7 @@ IGXVB * DeviceMTL::CreateVBO(const GX_VOID *_pData, GX_UINT32 _nSize)
     }
     
     MTLVBO * vbo = new MTLVBO();
-    vbo->m_mtlBuffer = buffer;
+    vbo->m_mtlBuffer = [buffer retain];
     vbo->m_nLength = _nSize;
     vbo->m_bDynamic = GX_FALSE;
     return vbo;
@@ -146,7 +150,7 @@ IGXIB * DeviceMTL::CreateIBO(const GX_VOID *_pData, GX_UINT32 _nSize)
     MTLIBO * ibo = new MTLIBO();
     ibo->m_bDynamic = GX_FALSE;
     ibo->m_nLength = _nSize;
-    ibo->m_mtlBuffer = buffer;
+    ibo->m_mtlBuffer = [buffer retain];
     return ibo;
 }
 
@@ -158,7 +162,7 @@ IGXVB * DeviceMTL::CreateDynVBO(GX_UINT32 _nSize)
         return NULL;
     }
     MTLVBO * vbo = new MTLVBO();
-    vbo->m_mtlBuffer = buffer;
+    vbo->m_mtlBuffer = [buffer retain];
     vbo->m_nLength = _nSize;
     vbo->m_bDynamic = GX_TRUE;
     return vbo;
@@ -186,7 +190,8 @@ IGXTex * DeviceMTL::CreateTexture(GX_PIXEL_FORMAT _fmt, GX_VOID * _pData,GX_UINT
     texDesc.height = pTexture->m_desc.nHeight;
     texDesc.pixelFormat = PixelFormat2MTL(pTexture->m_desc.eFormat);
     
-    pTexture->m_mtlTexture = [m_mtlDevice newTextureWithDescriptor:texDesc];
+    pTexture->m_mtlTexture = [[m_mtlDevice newTextureWithDescriptor:texDesc] retain];
+    [texDesc release];
     
     MTLRegion region;
     region.origin.x = 0;
@@ -220,7 +225,7 @@ IGXTex * DeviceMTL::CreateTextureDyn(GX_PIXEL_FORMAT _fmt,GX_UINT32 _nWidth,GX_U
                                                                                          width:_nWidth
                                                                                         height:_nHeight
                                                                                      mipmapped:NO];
-    pTexture->m_mtlTexture = [m_mtlDevice newTextureWithDescriptor:texDesc];
+    pTexture->m_mtlTexture = [[m_mtlDevice newTextureWithDescriptor:texDesc] retain];
     return pTexture;
 }
 
@@ -284,7 +289,6 @@ IGXRenderPipeline * DeviceMTL::CreateDefaultRenderPipeline(GX_RENDERPIPELINE_DES
     pRenderPipeline->m_bDefaultPipeline = GX_TRUE;
     
     assert(internalDevice->m_metalLayer != nil);
-    m_metalLayer = internalDevice->m_metalLayer;
     
     MTLRenderPassDescriptor * renderPassDesc = [[MTLRenderPassDescriptor alloc] init];
     pRenderPipeline->m_renderPassDesc = renderPassDesc;
@@ -302,9 +306,10 @@ IGXEffect* DeviceMTL::CreateEffect(GX_EFFECT_DESC * _pDesc)
     memcpy(&pEffect->desc,_pDesc,sizeof(GX_EFFECT_DESC));
     MTLCompileOptions * cpOption = [[MTLCompileOptions alloc] init];
     NSError * error = nil;
-    pEffect->library = [internalDevice->m_mtlDevice newLibraryWithSource:[NSString stringWithUTF8String:_pDesc->szLibrarySource]
+    pEffect->library = [[internalDevice->m_mtlDevice newLibraryWithSource:[NSString stringWithUTF8String:_pDesc->szLibrarySource]
                                                                  options:cpOption
-                                                                   error:&error];
+                                                                   error:&error] retain];
+    [cpOption release];
     //assert(error == nil);
     
     MTLRenderPipelineDescriptor *pipelineDesc = [[MTLRenderPipelineDescriptor alloc] init];
@@ -313,6 +318,8 @@ IGXEffect* DeviceMTL::CreateEffect(GX_EFFECT_DESC * _pDesc)
     id<MTLFunction> fragmentFunction = [pEffect->library newFunctionWithName:@"fragment_shader"];
     [pipelineDesc setVertexFunction: vertexFunction];
     [pipelineDesc setFragmentFunction: fragmentFunction];
+    [vertexFunction release];
+    [fragmentFunction release];
     
     [pipelineDesc setAlphaToCoverageEnabled:YES];
     [pipelineDesc setDepthAttachmentPixelFormat:MTLPixelFormatDepth32Float];
@@ -326,15 +333,20 @@ IGXEffect* DeviceMTL::CreateEffect(GX_EFFECT_DESC * _pDesc)
         RenderTargetMTL * pRenderTarget = (RenderTargetMTL *)renderPipeline->m_desc.pRenderTargets[i];
         pipelineDesc.colorAttachments[i].pixelFormat =  PixelFormat2MTL(pRenderTarget->desc.eFormat);
     }
+
+//#############
+    pEffect->renderPipelineState = [[internalDevice->m_mtlDevice newRenderPipelineStateWithDescriptor:pipelineDesc error:&error] retain];
+//#############
+    pEffect->renderPipelineDesc = pipelineDesc;
     
-    pEffect->renderPipelineState = [internalDevice->m_mtlDevice newRenderPipelineStateWithDescriptor:pipelineDesc error:&error];
     assert(error == nil);
     
     MTLDepthStencilDescriptor * depthDesc   =   [[MTLDepthStencilDescriptor alloc] init];
     depthDesc.depthCompareFunction          =   CompareFunction2MTL(_pDesc->renderState.DepthFunc);
     depthDesc.depthWriteEnabled             =   _pDesc->renderState.DepthWriteEnable;
-    
-    pEffect->depthStencilState = [internalDevice->m_mtlDevice newDepthStencilStateWithDescriptor:depthDesc];
+//#############
+    pEffect->depthStencilState = [[internalDevice->m_mtlDevice newDepthStencilStateWithDescriptor:depthDesc] retain];
+    [depthDesc release];
     
     return pEffect;
 }
@@ -383,11 +395,12 @@ void DeviceMTL::FlushDrawing()
     [m_mtlDefaultCmdBuffer addCompletedHandler: ^(id <MTLCommandBuffer> buffer )
      {
          dispatch_semaphore_signal( m_inflight_semaphore );
+         [buffer release];
      }];
     [m_mtlDefaultCmdBuffer presentDrawable:m_currentDrawable];
     // Finalize rendering here & push the command buffer to the GPU
     [m_mtlDefaultCmdBuffer commit];
-    m_mtlDefaultCmdBuffer = [m_mtlCmdQueue commandBuffer];
+    m_mtlDefaultCmdBuffer = [[m_mtlCmdQueue commandBuffer] retain];
 }
 
 void DeviceMTL::EmptyFlush()
@@ -407,14 +420,14 @@ IGXDevice * CreateDevice( void * deviceContext )
         return pGlobalDevice;
     }
     
-    id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+    id<MTLDevice> device = MTLCreateSystemDefaultDevice().retain;
     if (device == NULL)
     {
         return NULL;
     }
     DeviceMTL * pMTLDevice = new DeviceMTL();
     pMTLDevice->m_mtlDevice = device;
-    pMTLDevice->m_metalLayer = (__bridge CAMetalLayer*)deviceContext;
+    pMTLDevice->m_metalLayer = [(CAMetalLayer*)deviceContext retain];
     pMTLDevice->m_metalLayer.device = device;
     pMTLDevice->m_metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
     pMTLDevice->m_metalLayer.framebufferOnly = YES;
@@ -426,8 +439,8 @@ IGXDevice * CreateDevice( void * deviceContext )
     
     pMTLDevice->m_metalLayer.drawableSize = CGSizeMake(layerSize.size.width * pMTLDevice->m_contentScale, layerSize.size.height * pMTLDevice->m_contentScale);
     
-    pMTLDevice->m_mtlCmdQueue = [device newCommandQueue];
-    pMTLDevice->m_mtlDefaultCmdBuffer = [pMTLDevice->m_mtlCmdQueue commandBuffer];
+    pMTLDevice->m_mtlCmdQueue = [[device newCommandQueue] retain];
+    pMTLDevice->m_mtlDefaultCmdBuffer = [[pMTLDevice->m_mtlCmdQueue commandBuffer] retain];
     
     internalDevice = pMTLDevice;
     pGlobalDevice = pMTLDevice;

@@ -24,8 +24,6 @@
     CADisplayLink *         _timer;
     BOOL                    _gameLoopPaused;
     dispatch_semaphore_t    _inflight_semaphore;
-    // FBO的深度纹理
-    id<MTLTexture>          _depthTexture;
 }
 
 -(void)onInit;

@@ -241,6 +241,8 @@ struct IGXEffect
     
     virtual GX_BOOL Begin() = 0;
     virtual GX_BOOL End() = 0;
+    
+    virtual void Release() = 0;
 };
 
 

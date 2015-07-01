@@ -10,6 +10,9 @@
 #import "./metal/MTLGameViewController.h"
 
 @interface AppDelegate ()
+{
+    MTLGameViewController * _viewController;
+}
 
 @end
 
@@ -21,10 +24,11 @@
     // Override point for customization after application launch.
     // Get Screen Size
     CGRect screenSize = [[UIScreen mainScreen] bounds];
-    self.window = [[UIWindow alloc] initWithFrame:screenSize];
+    self.window = [[[UIWindow alloc] initWithFrame:screenSize] autorelease];
     
     MTLGameViewController * gameViewController = [[MTLGameViewController alloc] initWithNibName:nil bundle:nil];
-    gameViewController.view = [[UIView alloc] initWithFrame:screenSize];
+    gameViewController.view = [[UIView alloc] initWithFrame:screenSize].autorelease;
+    _viewController = gameViewController;
     // call init method for init basic data
     [gameViewController onInit];
     self.window.rootViewController = gameViewController;
@@ -52,6 +56,13 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+-(void)dealloc
+{
+    [_viewController release];
+    [_window release];
+    [super dealloc];
 }
 
 @end

@@ -102,6 +102,7 @@ void RenderPipelineMTL::Init()
             depthTexRef->m_mtlTexture = depthTexture;
             depthTexRef->m_desc.nWidth = (GX_UINT32)texture.width;
             depthTexRef->m_desc.nHeight = (GX_UINT32)texture.height;
+            [depthTextureDesc release];
         }
     }
 }
@@ -159,6 +160,7 @@ bool RenderPipelineMTL::Begin()
             depthTexRef->m_mtlTexture = depthTexture;
             depthTexRef->m_desc.nWidth = (GX_UINT32)texture.width;
             depthTexRef->m_desc.nHeight = (GX_UINT32)texture.height;
+            [depthTextureDesc release];
         }
         m_renderPassDesc.depthAttachment.texture = depthTexture;
         m_renderPassDesc.depthAttachment.loadAction = MTLLoadActionClear;
