@@ -13,6 +13,11 @@
 
 DeviceMTL * internalDevice;
 
+__block void OnCommandBufferCommitted(id<MTLCommandBuffer> commandBuffer)
+{
+    
+}
+
 MTLSamplerAddressMode AddressMode2MTL(GX_TEX_ADDRESS_MODE addressMode)
 {
     switch (addressMode)
@@ -335,15 +340,43 @@ IGXEffect* DeviceMTL::GetCurrentEffect()
 
 void DeviceMTL::OnResize(GX_UINT16 nWidth,GX_UINT16 nHeight)
 {
-    [this->m_metalLayer setFrame: CGRectMake(0, 0, nWidth, nHeight)];
+    m_layerShouldUpdte = GX_TRUE;
+    
+    m_layerCurrentSize.dx = nWidth;
+    m_layerCurrentSize.dy = nHeight;
+    m_layerCurrentSize.x = m_layerCurrentSize.y = 0;
+}
+
+void DeviceMTL::BeginDrawing()
+{
+    dispatch_semaphore_wait(m_inflight_semaphore, DISPATCH_TIME_FOREVER);
+    if (m_layerShouldUpdte == GX_TRUE)
+    {
+        CGFloat nativeScale = [[UIScreen mainScreen] nativeScale];
+        [this->m_metalLayer setFrame: CGRectMake(0, 0, m_layerCurrentSize.dx, m_layerCurrentSize.dy)];
+        this->m_metalLayer.drawableSize = CGSizeMake(m_layerCurrentSize.dx * nativeScale, m_layerCurrentSize.dy * nativeScale);
+        m_viewport.dx = m_layerCurrentSize.dx * nativeScale;
+        m_viewport.dy = m_layerCurrentSize.dy * nativeScale;
+        m_layerShouldUpdte = GX_FALSE;
+    }
+    m_currentDrawable = m_metalLayer.nextDrawable;
 }
 
 void DeviceMTL::FlushDrawing()
 {
-    [m_mtlDefaultCmdBuffer presentDrawable:m_metalLayer.nextDrawable];
+    [m_mtlDefaultCmdBuffer addCompletedHandler: ^(id <MTLCommandBuffer> buffer )
+     {
+         dispatch_semaphore_signal( m_inflight_semaphore );
+     }];
+    [m_mtlDefaultCmdBuffer presentDrawable:m_currentDrawable];
     // Finalize rendering here & push the command buffer to the GPU
     [m_mtlDefaultCmdBuffer commit];
     m_mtlDefaultCmdBuffer = [m_mtlCmdQueue commandBuffer];
+}
+
+id<CAMetalDrawable> DeviceMTL::currentDrawable()
+{
+    return this->m_currentDrawable;
 }
 
 IGXDevice * CreateDevice( void * deviceContext )
@@ -361,10 +394,16 @@ IGXDevice * CreateDevice( void * deviceContext )
     DeviceMTL * pMTLDevice = new DeviceMTL();
     pMTLDevice->m_mtlDevice = device;
     pMTLDevice->m_metalLayer = (__bridge CAMetalLayer*)deviceContext;
-    
     pMTLDevice->m_metalLayer.device = device;
     pMTLDevice->m_metalLayer.pixelFormat = MTLPixelFormatBGRA8Unorm;
     pMTLDevice->m_metalLayer.framebufferOnly = YES;
+    pMTLDevice->m_contentScale = [[UIScreen mainScreen] scale];
+    // 控制command buffer 的 commit数目，如果commit太多没有完成，则等待
+    pMTLDevice->m_inflight_semaphore = dispatch_semaphore_create(3);
+    
+    CGRect layerSize =  pMTLDevice->m_metalLayer.bounds;
+    
+    pMTLDevice->m_metalLayer.drawableSize = CGSizeMake(layerSize.size.width * pMTLDevice->m_contentScale, layerSize.size.height * pMTLDevice->m_contentScale);
     
     pMTLDevice->m_mtlCmdQueue = [device newCommandQueue];
     pMTLDevice->m_mtlDefaultCmdBuffer = [pMTLDevice->m_mtlCmdQueue commandBuffer];

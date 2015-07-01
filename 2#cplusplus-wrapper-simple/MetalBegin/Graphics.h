@@ -287,7 +287,7 @@ struct GX_CLEAR
     GX_CLEAR()
     {
         clearMask = GX_COLOR_BUFFER_BITS | GX_DEPTH_BUFFER_BITS | GX_STENCIL_BUFFER_BITS;
-        vColorValues[0] = 0.0f; vColorValues[1] = 0.0f; vColorValues[2] = 0.0f; vColorValues[3] = 1.0f;
+        vColorValues[0] = 0.8f; vColorValues[1] = 0.8f; vColorValues[2] = 0.8f; vColorValues[3] = 1.0f;
         fDepthValue = 1.0f;
         nStencilValue = 0x0;
     }
@@ -341,6 +341,7 @@ struct IGXDevice
     
     virtual void OnResize(GX_UINT16 nWidth,GX_UINT16 nHeight) = 0;
     
+    virtual void BeginDrawing() = 0;
     virtual void FlushDrawing() = 0;
     
     virtual void Release() = 0;

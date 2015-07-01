@@ -15,6 +15,8 @@
 #include "MTLBuffer.h"
 #include "MTLEffect.h"
 
+__block void OnCommandBufferCommitted(id<MTLCommandBuffer> commandBuffer);
+
 MTLSamplerAddressMode AddressMode2MTL(GX_TEX_ADDRESS_MODE addressMode);
 
 MTLSamplerMinMagFilter MinMagFilerMode2MTL(GX_TEX_FILTER filter);
@@ -42,6 +44,15 @@ struct DeviceMTL : public IGXDevice
     
     IGXRenderPipeline*          m_pCurrentPipeline;
     IGXEffect*                  m_pCurrentEffect;
+    
+    float                       m_contentScale;
+    
+    id <CAMetalDrawable>        m_currentDrawable;
+    
+    dispatch_semaphore_t        m_inflight_semaphore;
+    
+    GX_BOOL                     m_layerShouldUpdte;
+    GX_RECT                     m_layerCurrentSize;
     
     
     
@@ -76,6 +87,9 @@ struct DeviceMTL : public IGXDevice
     
     void OnResize(GX_UINT16 nWidth,GX_UINT16 nHeight);
     
+    id<CAMetalDrawable> currentDrawable();
+    
+    void BeginDrawing();
     void FlushDrawing();
 
     void Release();

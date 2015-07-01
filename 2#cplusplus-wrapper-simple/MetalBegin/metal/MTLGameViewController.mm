@@ -14,6 +14,8 @@
 #import <simd/simd.h>
 #import <QuartzCore/QuartzCore.h>
 
+float screenScale = 0.0f;
+
 static const float vertices[18] =
 {
     1,0,0,       1,0,0,
@@ -39,32 +41,32 @@ static const float vertices[18] =
     [self.view.layer addSublayer:metalLayer];
     self.view.opaque = YES;
     self.view.backgroundColor = [UIColor purpleColor];
-    self.view.contentScaleFactor = [[UIScreen mainScreen] scale];
+    screenScale = self.view.contentScaleFactor = [[UIScreen mainScreen] scale];
     _pDevice = CreateDevice((__bridge void * )metalLayer);
     
     static GX_RECT viewportRect;
     static GX_RECT scissorRect;
     
-    viewportRect.dx = self.view.bounds.size.width;
-    viewportRect.dy = self.view.bounds.size.height;
-    scissorRect.dx = self.view.bounds.size.width;
-    scissorRect.dy = self.view.bounds.size.height;
+    viewportRect.dx = self.view.bounds.size.width * screenScale;
+    viewportRect.dy = self.view.bounds.size.height * screenScale;
+    scissorRect.dx = self.view.bounds.size.width * screenScale;
+    scissorRect.dy = self.view.bounds.size.height * screenScale;
     
     _pDevice->SetViewport(&viewportRect);
     _pDevice->SetScissor(&scissorRect);
     
-    static GX_RENDERPIPELINE_DESC renderPipelineDesc;
-    static GX_RENDERTARGET_DESC renderTargetDesc;
-    static GX_DEPTH_STENCIL_DESC depthStencilDesc;
-    static GX_TEX_DESC depthTexDesc;
-    static GX_EFFECT_DESC effectDesc;
+    static GX_RENDERPIPELINE_DESC       renderPipelineDesc;
+    static GX_RENDERTARGET_DESC         renderTargetDesc;
+    static GX_DEPTH_STENCIL_DESC        depthStencilDesc;
+    static GX_TEX_DESC                  depthTexDesc;
+    static GX_EFFECT_DESC               effectDesc;
     
-    depthStencilDesc.nWidth = rect.size.width;
-    depthStencilDesc.nHeight = rect.size.height;
-    depthTexDesc.nWidth = rect.size.width;
-    depthTexDesc.nHeight = rect.size.height;
+    depthStencilDesc.nWidth = rect.size.width * [[UIScreen mainScreen] scale];
+    depthStencilDesc.nHeight = rect.size.height * [[UIScreen mainScreen] scale];
+    depthTexDesc.nWidth = rect.size.width * [[UIScreen mainScreen] scale];
+    depthTexDesc.nHeight = rect.size.height * [[UIScreen mainScreen] scale];
     depthTexDesc.eFormat = GX_RAW_DEPTH;
-    depthStencilDesc.texture = _pDevice->CreateTextureDyn(GX_RAW_DEPTH, rect.size.width, rect.size.height);
+    depthStencilDesc.texture = _pDevice->CreateTextureDyn(GX_RAW_DEPTH, rect.size.width * [[UIScreen mainScreen] scale], rect.size.height * [[UIScreen mainScreen] scale]);
     _pDepthStencil = _pDevice->CreateDepthStencil(&depthStencilDesc);
     
     renderTargetDesc.eFormat = GX_RAW_RGBA8888;
@@ -95,12 +97,10 @@ static const float vertices[18] =
     _pVBO = _pDevice->CreateVBO(vertices, sizeof(vertices));
 
     [self _setupMetal];
-    [self onUpdate:nil];
+    
     // _gameloop 会在每个runloop循环执行一次
-   /* _timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(_gameloop)];
-    [_timer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];
-    _inflight_semaphore = dispatch_semaphore_create(3);
-    */
+    _timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(_gameloop)];
+    [_timer addToRunLoop:[NSRunLoop mainRunLoop] forMode:NSDefaultRunLoopMode];    
 }
 
 - (void)_setupMetal
@@ -109,32 +109,20 @@ static const float vertices[18] =
 
 - (void)_render
 {
-    //dispatch_semaphore_wait(_inflight_semaphore, DISPATCH_TIME_FOREVER);
+    _pDevice->BeginDrawing();
     // context的texture是不断变化的，取当前有效的texture
-    
     if(_pRenderPipeline->Begin() == false || _pEffect->Begin() == false)
     {
-        NSTimer * timer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(onUpdate:) userInfo:nil repeats:NO];
-        [[NSRunLoop currentRunLoop] addTimer:timer forMode: NSDefaultRunLoopMode];
         return;
     }
-    _pEffect->SetVertexBuffer(_pVBO, 0);
     
+    _pEffect->SetVertexBuffer(_pVBO, 0);
     _pDevice->DrawPrimitives(GX_DRAW_TRIANGLE, 3, 1);
 
     _pEffect->End();
     _pRenderPipeline->End();
     
     _pDevice->FlushDrawing();
-    
-    NSTimer * timer = [NSTimer timerWithTimeInterval:0.1 target:self selector:@selector(onUpdate:) userInfo:nil repeats:NO];
-    [[NSRunLoop currentRunLoop] addTimer:timer forMode: NSDefaultRunLoopMode];
-   
-}
-
--(void)onUpdate:(id)info
-{
-    [self _render];
 }
 
 - (void)viewDidLoad
@@ -177,26 +165,15 @@ static const float vertices[18] =
 }
 
 // The main game loop called by the CADisplayLine timer
-/*
+
 - (void)_gameloop
 {
-    @autoreleasepool {
-        if (_layerSizeShouldUpdate)
-        {
-            CGFloat nativeScale = self.view.window.screen.nativeScale;
-            CGSize drawableSize = self.view.bounds.size;
-            drawableSize.width *= nativeScale;
-            drawableSize.height *= nativeScale;
-            _metalLayer.drawableSize = drawableSize;
-            // 这里一般要改变投影矩阵
-            [self _reshape];
-            _layerSizeShouldUpdate = NO;
-        }
+    @autoreleasepool
+    {
         // draw
         [self _render];
     }
 }
-*/
 
 // Called whenever view changes orientation or layout is changed
 
@@ -204,6 +181,7 @@ static const float vertices[18] =
 {
     CGRect rect = [self.view bounds];
     _pDevice->OnResize(rect.size.width, rect.size.height);
+    self.view.contentScaleFactor = [[UIScreen mainScreen] scale];
 }
 
 @end

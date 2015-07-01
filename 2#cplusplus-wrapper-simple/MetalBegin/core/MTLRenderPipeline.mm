@@ -78,12 +78,13 @@ void RenderPipelineMTL::Init()
         }
         // 默认的fbo需要看看窗口大小是不是变了需要处理
         
-        id<CAMetalDrawable> drawable = internalDevice->m_metalLayer.nextDrawable;;
+        id<CAMetalDrawable> drawable = internalDevice->currentDrawable();
         if (drawable == nil)
         {
             return;
         }
         id<MTLTexture> texture = drawable.texture;
+        //NSLog(@"texture width : %lu height: %lu ",(unsigned long)texture.width,(unsigned long)texture.height);
         m_renderPassDesc.colorAttachments[0].texture = texture;
         
         // 处理深度缓冲区
@@ -133,13 +134,15 @@ bool RenderPipelineMTL::Begin()
         }
         // 默认的fbo需要看看窗口大小是不是变了需要处理
         
-        id<CAMetalDrawable> drawable = internalDevice->m_metalLayer.nextDrawable;;
+        id<CAMetalDrawable> drawable = internalDevice->currentDrawable();
         if (drawable == nil)
         {
             return false;
         }
         id<MTLTexture> texture = drawable.texture;
         m_renderPassDesc.colorAttachments[0].texture = texture;
+        
+        //NSLog(@"texture width : %lu height: %lu ",(unsigned long)texture.width,(unsigned long)texture.height);
         
         // 处理深度缓冲区
         DepthStencilMTL * depthStencil = (DepthStencilMTL *)m_desc.pDepthStencil;
