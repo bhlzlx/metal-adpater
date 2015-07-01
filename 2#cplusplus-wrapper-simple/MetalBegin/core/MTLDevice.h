@@ -27,6 +27,8 @@ MTLCullMode CullMode2MTL(GX_CULL_MODE mode);
 
 MTLCompareFunction CompareFunction2MTL( GX_CMP_FUNC _func);
 
+MTLPrimitiveType PrimitiveType2MTL(GX_DRAW _drawType);
+
 struct DeviceMTL : public IGXDevice
 {
     // metal 的设备上下文
@@ -91,6 +93,7 @@ struct DeviceMTL : public IGXDevice
     
     void BeginDrawing();
     void FlushDrawing();
+    void EmptyFlush();
 
     void Release();
 };

@@ -109,10 +109,13 @@ static const float vertices[18] =
 
 - (void)_render
 {
-    _pDevice->BeginDrawing();
     // context的texture是不断变化的，取当前有效的texture
+    // 准备提交command buffer的互斥工作
+    _pDevice->BeginDrawing();
+    // 判断当前程序资源的有效性，如果无效则
     if(_pRenderPipeline->Begin() == false || _pEffect->Begin() == false)
     {
+        _pDevice->EmptyFlush();
         return;
     }
     
@@ -170,7 +173,9 @@ static const float vertices[18] =
 {
     @autoreleasepool
     {
-        // draw
+        // 更新数据
+        [self _update];
+        // 渲染
         [self _render];
     }
 }

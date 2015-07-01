@@ -305,7 +305,8 @@ struct GX_RENDERPIPELINE_DESC
 
 enum GX_DRAW
 {
-    GX_DRAW_TRIANGLE
+    GX_DRAW_TRIANGLE,
+    GX_DRAW_LINE
 };
 
 
@@ -343,8 +344,9 @@ struct IGXDevice
     
     virtual void BeginDrawing() = 0;
     virtual void FlushDrawing() = 0;
-    
+    virtual void EmptyFlush() = 0;
     virtual void Release() = 0;
+    
 };
 
 IGXDevice * CreateDevice( void * deviceContext );

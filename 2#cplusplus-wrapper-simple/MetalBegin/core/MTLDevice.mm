@@ -100,6 +100,19 @@ GX_UINT32 BytesForPixelFormat(enum GX_PIXEL_FORMAT _fmt)
     return 0;
 }
 
+MTLPrimitiveType PrimitiveType2MTL(GX_DRAW _drawType)
+{
+    switch (_drawType)
+    {
+        case GX_DRAW_TRIANGLE:
+            return MTLPrimitiveTypeTriangle;
+            break;
+        case GX_DRAW_LINE: return MTLPrimitiveTypeLine;
+        default:
+            break;
+    }
+}
+
 
 void DeviceMTL::Release()
 {
@@ -248,7 +261,10 @@ GX_BOOL DeviceMTL::DrawIndexed( GX_DRAW _drawMode, IGXIB * _pIB, GX_UINT32 _NumV
 GX_BOOL DeviceMTL::DrawPrimitives(GX_DRAW _drawMode,GX_UINT32 _NumVertices, GX_UINT32 _NumInstance)
 {
     RenderPipelineMTL * pipeline = (RenderPipelineMTL * )this->GetCurrentRenderPipeline();
-    [pipeline->m_renderCmdEncoder drawPrimitives:MTLPrimitiveTypeTriangle vertexStart:0 vertexCount:_NumVertices instanceCount:_NumInstance];
+    [pipeline->m_renderCmdEncoder drawPrimitives:PrimitiveType2MTL(_drawMode)
+                                     vertexStart:0
+                                     vertexCount:_NumVertices
+                                   instanceCount:_NumInstance];
     return GX_TRUE;
 }
 
@@ -372,6 +388,11 @@ void DeviceMTL::FlushDrawing()
     // Finalize rendering here & push the command buffer to the GPU
     [m_mtlDefaultCmdBuffer commit];
     m_mtlDefaultCmdBuffer = [m_mtlCmdQueue commandBuffer];
+}
+
+void DeviceMTL::EmptyFlush()
+{
+    dispatch_semaphore_signal( m_inflight_semaphore );
 }
 
 id<CAMetalDrawable> DeviceMTL::currentDrawable()
