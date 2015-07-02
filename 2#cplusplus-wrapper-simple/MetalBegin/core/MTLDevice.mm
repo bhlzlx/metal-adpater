@@ -229,6 +229,67 @@ IGXTex * DeviceMTL::CreateTextureDyn(GX_PIXEL_FORMAT _fmt,GX_UINT32 _nWidth,GX_U
     return pTexture;
 }
 
+IGXTex * DeviceMTL::CreateChessTexture()
+{
+    static const unsigned while_color = 0xffffffff;
+    static const unsigned black_color = 0xffff0000;
+    
+    unsigned bitmap[64][64];
+    
+    int _s,_ss,_w,_ww;
+    
+    for(int i = 0;i<64;++i)
+    {
+        _ss = 1;
+        _s = i/4;
+        if( _s % 2 == 0)
+        {
+            _ss = 0;
+        }
+        for(int j = 0;j<64;++j)
+        {
+            _ww = 1;
+            _w  = j/4;
+            if( _w % 2 == 0)
+            {
+                _ww = 0;
+            }
+            if(_ww == _ss)
+            {
+                bitmap[i][j] = while_color;
+            }
+            else
+            {
+                bitmap[i][j] = black_color;
+            }
+        }
+    }
+    
+    TextureMTL * pTexture = new TextureMTL();
+    pTexture->m_bDynamic = GX_FALSE;
+    pTexture->m_desc.eFormat = GX_RAW_RGBA8888;
+    pTexture->m_desc.eClass = GX_TEX_CLASS_STATIC_RAW;
+    pTexture->m_desc.nHeight = 64;
+    pTexture->m_desc.nWidth = 64;
+    pTexture->m_nMipmapLevel = 4;
+    
+    MTLTextureDescriptor * texDesc = [MTLTextureDescriptor  texture2DDescriptorWithPixelFormat:MTLPixelFormatBGRA8Unorm
+                                                                                         width:64
+                                                                                        height:64
+                                                                                     mipmapped:YES];
+    
+    
+    MTLRegion region = MTLRegionMake2D(0, 0, 64, 64);
+    
+    pTexture->m_mtlTexture = [[m_mtlDevice newTextureWithDescriptor:texDesc] retain];
+    [pTexture->m_mtlTexture replaceRegion:region
+                              mipmapLevel:0
+                                withBytes:bitmap
+                              bytesPerRow:64 * 4];
+    return pTexture;
+
+}
+
 IGXDepthStencil * DeviceMTL::CreateDepthStencil(GX_DEPTH_STENCIL_DESC * pDesc)
 {
     DepthStencilMTL * depthStencil = new DepthStencilMTL();

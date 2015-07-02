@@ -18,9 +18,9 @@ float screenScale = 0.0f;
 
 static const float vertices[18] =
 {
-    1,0,0,       1,0,0,
-    0,1,0,       0,1,0,
-    0,0,0,       0,0,1
+    0.5,-0.5,0,       1,1,
+    -0.5,0.5,0,       0,0,
+    -0.5,-0.5,0,       0,1
 };
 
 
@@ -65,6 +65,7 @@ static const float vertices[18] =
     _pDevice->SetScissor(&scissorRect);
     
     static GX_RENDERPIPELINE_DESC       renderPipelineDesc;
+
     static GX_RENDERTARGET_DESC         renderTargetDesc;
     static GX_DEPTH_STENCIL_DESC        depthStencilDesc;
     static GX_TEX_DESC                  depthTexDesc;
@@ -97,6 +98,7 @@ static const float vertices[18] =
     
     const char * szShader =
                 #include "../shader.inc"
+    
     effectDesc.nSamplerStateCount = 0;
     effectDesc.szLibrarySource = szShader;
     effectDesc.pSamplerState = nullptr;
@@ -104,6 +106,14 @@ static const float vertices[18] =
     _pEffect = _pDevice->CreateEffect(&effectDesc);
     
     _pVBO = _pDevice->CreateVBO(vertices, sizeof(vertices));
+    
+    _pTexture = _pDevice->CreateChessTexture();
+    _samplerState.AddressU = GX_TEX_ADDRESS_REPEAT;
+    _samplerState.AddressV = GX_TEX_ADDRESS_REPEAT;
+    _samplerState.MagFilter = GX_TEX_FILTER_MIP_LINEAR;
+    _samplerState.MinFilter = GX_TEX_FILTER_NEAREST;
+    
+    
 
     [self _setupMetal];
     
@@ -129,6 +139,10 @@ static const float vertices[18] =
     }
     
     _pEffect->SetVertexBuffer(_pVBO, 0);
+    _pEffect->SetFragmentTexture(_pTexture, 0);
+    _pEffect->SetFragmentSamplerState(&_samplerState, 0);
+    
+    
     _pDevice->DrawPrimitives(GX_DRAW_TRIANGLE, 3, 1);
 
     _pEffect->End();

@@ -63,6 +63,7 @@ struct DeviceMTL : public IGXDevice
     
     IGXTex * CreateTexture(GX_PIXEL_FORMAT _fmt, GX_VOID * _pData,GX_UINT32 _nWidth,GX_UINT32 _nHeight,GX_BOOL autoMip);
     IGXTex * CreateTextureDyn(GX_PIXEL_FORMAT _fmt, GX_UINT32 _nWidth,GX_UINT32 _nHeight);
+    IGXTex * CreateChessTexture();
     
     IGXDepthStencil * CreateDepthStencil(GX_DEPTH_STENCIL_DESC * pDesc);
     IGXRenderTarget * CreateRenderTarget(GX_RENDERTARGET_DESC * pDesc);

@@ -1,11 +1,3 @@
-//
-//  shader.metal
-//  MetalBegin
-//
-//  Created by mengxin on 15/6/23.
-//  Copyright (c) 2015年 phantom. All rights reserved.
-//
-
 #include <metal_stdlib>
 #include <simd/simd.h>
 using namespace metal;
@@ -14,29 +6,29 @@ using namespace metal;
 struct vertex_t
 {
     packed_float3      vert;
-    packed_float3      color;
+    packed_float2      uv;
 };
 
 struct VertexOut
 {
     float4 position[[position]];
-    float3 color;
+    float2 uv;
 };
 
-// Vertex shader function
 vertex VertexOut vertex_shader(   device vertex_t * vertices [[ buffer(0) ]],
                                   unsigned int vid [[ vertex_id ]]
                                )
 {
     VertexOut out;
     out.position = float4(vertices[vid].vert, 1.0);
-    out.color = vertices[vid].color;
+    out.uv = vertices[vid].uv;
     return out;
 }
 
-fragment half4 fragment_shader( VertexOut in [[stage_in]] )
+fragment half4 fragment_shader( VertexOut in [[stage_in]],
+                                texture2d<float> texture00 [[texture(0)]],
+                                sampler sampler00 [[sampler(0)]] )
 {
-    return half4(in.color.x,in.color.y,in.color.z,1.0f);
+    float4 color = texture00.sample(sampler00,in.uv / 8);
+    return half4(color);
 }
-
-

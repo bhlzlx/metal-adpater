@@ -73,6 +73,8 @@ void EffectMTL::SetFragmentSamplerState(GX_SAMPLER_STATE * _pSamplerState,GX_UIN
     desc.tAddressMode = AddressMode2MTL(_pSamplerState->AddressV);
     id<MTLSamplerState> samplerState = [device newSamplerStateWithDescriptor:desc];
     [pCurrentPipeline->m_renderCmdEncoder setFragmentSamplerState:samplerState atIndex:_index];
+    [samplerState release];
+    [desc release];
 }
 
 void EffectMTL::SetFragmentTexture(IGXTex * _pTexture,GX_UINT32 _index)
@@ -80,7 +82,7 @@ void EffectMTL::SetFragmentTexture(IGXTex * _pTexture,GX_UINT32 _index)
     // 获取当前pipeline,取得pipeline的renderEncoder
     TextureMTL * texture = (TextureMTL *)_pTexture;
     RenderPipelineMTL * pCurrentPipeline = (RenderPipelineMTL *)pGlobalDevice->GetCurrentRenderPipeline();
-    [pCurrentPipeline->m_renderCmdEncoder setVertexTexture:texture->m_mtlTexture atIndex:_index];
+    [pCurrentPipeline->m_renderCmdEncoder setFragmentTexture:texture->m_mtlTexture atIndex:_index];
 }
 
 GX_BOOL EffectMTL::Begin()

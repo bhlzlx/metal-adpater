@@ -10,6 +10,8 @@
     // 设备
     IGXDevice *             _pDevice;
     IGXEffect *             _pEffect;
+    IGXTex    *             _pTexture;
+    GX_SAMPLER_STATE        _samplerState;
     
     IGXRenderTarget*        _pRenderTarget;
     IGXDepthStencil*        _pDepthStencil;

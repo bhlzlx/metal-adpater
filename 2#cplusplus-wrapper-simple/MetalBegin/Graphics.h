@@ -193,8 +193,8 @@ struct GXRenderState
         SissorEnable = GX_FALSE;
         
         BlendEnable = GX_FALSE;
-        BlendSrc = GX_BLEND_SRCALPHA;
-        BlendDst = GX_BLEND_INVSRCALPHA;
+        BlendSrc = GX_BLEND_ONE;
+        BlendDst = GX_BLEND_ZERO;
         
         BlendOp = GX_BLEND_OP_ADD;
     }
@@ -321,6 +321,7 @@ struct IGXDevice
     
     virtual IGXTex * CreateTexture(GX_PIXEL_FORMAT _fmt, GX_VOID * _pData,GX_UINT32 _nWidth,GX_UINT32 _nHeight,GX_BOOL autoMip) = 0;
     virtual IGXTex * CreateTextureDyn(GX_PIXEL_FORMAT _fmt,GX_UINT32 _nWidth,GX_UINT32 _nHeight) = 0;
+    virtual IGXTex * CreateChessTexture() = 0;
     
     virtual IGXRenderTarget * CreateRenderTarget(GX_RENDERTARGET_DESC * _pDesc) = 0;
     virtual IGXDepthStencil * CreateDepthStencil(GX_DEPTH_STENCIL_DESC * _pDesc) = 0;
