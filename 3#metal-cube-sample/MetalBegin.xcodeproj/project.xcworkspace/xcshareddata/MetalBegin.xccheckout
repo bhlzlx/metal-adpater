@@ -14,7 +14,7 @@
 		<string>https://github.com/bhlzlx/metal-adpater.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>3#cube-sample/MetalBegin.xcodeproj</string>
+	<string>3#metal-cube-sample/MetalBegin.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>DA6F3E04EC508714B985EED8F80420EFCBBBBAAA</key>

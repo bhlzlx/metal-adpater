@@ -259,7 +259,7 @@ const float __cube[8 * 36] =
 
 - (void)_update
 {
-    _rad += 0.01;
+    _rad += 0.02;
     _cubeModel = glm::rotate(glm::mat4(1.0), _rad, glm::vec3(0,1,0));
 }
 
