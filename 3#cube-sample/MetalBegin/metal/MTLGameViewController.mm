@@ -8,21 +8,76 @@
 
 #import "MTLGameViewController.h"
 
-
-
 #import <Metal/Metal.h>
 #import <simd/simd.h>
 #import <QuartzCore/QuartzCore.h>
+#include <glm/gtc/matrix_transform.hpp>
 
 float screenScale = 0.0f;
 
-static const float vertices[18] =
+struct ShaderMatrices
 {
-    0.5,-0.5,0,       1,1,
-    -0.5,0.5,0,       0,0,
-    -0.5,-0.5,0,       0,1
+    glm::mat4 model;
+    glm::mat4 view;
+    glm::mat4 projection;
 };
 
+struct ShaderSceneData
+{
+    glm::vec4 light_pos;
+};
+
+const float __cube[8 * 36] =
+{
+    // 1 …œ
+    -1,1,-1,	0,1,0, 0,0,
+    -1,1,1,		0,1,0, 0,1,
+    1,1,1,		0,1,0, 1,1,
+    
+    -1,1,-1,	0,1,0, 0,0,
+    1,1,1,		0,1,0, 1,1,
+    1,1,-1,		0,1,0, 1,0,
+    // 2 «∞
+    -1,1,1,		0,0,1, 0,0,
+    -1,-1,1,	0,0,1, 0,1,
+    1,-1,1,		0,0,1, 1,1,
+    
+    -1,1,1,		0,0,1, 0,0,
+    1,-1,1,		0,0,1, 1,1,
+    1,1,1,		0,0,1, 1,0,
+    // 3 œ¬
+    -1,-1,1,	0,-1,0, 0,0,
+    -1,-1,-1,	0,-1,0, 0,1,
+    1,-1,-1,	0,-1,0, 1,1,
+    
+    -1,-1,1,	0,-1,0, 0,0,
+    1,-1,-1,	0,-1,0, 1,1,
+    1,-1,1,     0,-1,0, 1,0,
+    // 4 ∫Û
+    1,1,-1,     0,0,-1, 0,0,
+    1,-1,-1,	0,0,-1, 0,1,
+    -1,-1,-1,	0,0,-1, 1,1,
+    
+    1,1,-1,     0,0,-1, 0,0,
+    -1,-1,-1,	0,0,-1, 1,1,
+    -1,1,-1,	0,0,-1, 1,0,
+    // 5 ”“
+    1,1,1,		1,0,0,	0,0,
+    1,-1,1,		1,0,0,	0,1,
+    1,-1,-1,	1,0,0,	1,1,
+    
+    1,1,1,		1,0,0,	0,0,
+    1,-1,-1,	1,0,0,	1,1,
+    1,1,-1,		1,0,0,	1,0,
+    // 6 ◊Û
+    -1,1,-1,	-1,0,0,	0,0,
+    -1,-1,-1,	-1,0,0,	0,1,
+    -1,-1,1,	-1,0,0,	1,1,
+    
+    -1,1,-1,	-1,0,0,	0,0,
+    -1,-1,1,	-1,0,0,	1,1,
+    -1,1,1,		-1,0,0,	1,0
+};
 
 @implementation MTLGameViewController
 {
@@ -97,7 +152,7 @@ static const float vertices[18] =
     _pDevice->SetCurrentRenderPipeline(_pRenderPipeline);
     
     const char * szShader =
-                #include "../shader.inc"
+                #include "../shader.inl"
     
     effectDesc.nSamplerStateCount = 0;
     effectDesc.szLibrarySource = szShader;
@@ -105,7 +160,9 @@ static const float vertices[18] =
 
     _pEffect = _pDevice->CreateEffect(&effectDesc);
     
-    _pVBO = _pDevice->CreateVBO(vertices, sizeof(vertices));
+    _pVBO = _pDevice->CreateVBO(__cube, sizeof(__cube));
+    _pMatricesVBO = _pDevice->CreateDynVBO(sizeof(ShaderMatrices));
+    _pSceneDataVBO = _pDevice->CreateDynVBO(sizeof(ShaderSceneData));
     
     _pTexture = _pDevice->CreateChessTexture();
     _samplerState.AddressU = GX_TEX_ADDRESS_REPEAT;
@@ -116,6 +173,9 @@ static const float vertices[18] =
     
 
     [self _setupMetal];
+    
+    _rad = 0.0f;
+    _cubeView = glm::lookAt(glm::vec3(10,5,10), glm::vec3(0,0,0), glm::vec3(0,1,0));
     
     // _gameloop 会在每个runloop循环执行一次
     _timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(_gameloop)];
@@ -138,7 +198,20 @@ static const float vertices[18] =
         return;
     }
     
+    ShaderMatrices matrices ;
+    matrices.model = _cubeModel;
+    matrices.view = _cubeView;
+    matrices.projection = _projection;
+    _pMatricesVBO->SetData(&matrices, sizeof(matrices));
+    
+    ShaderSceneData sceneData;
+    sceneData.light_pos = glm::vec4(10,5,10,1);
+    _pSceneDataVBO->SetData(&sceneData, sizeof(sceneData));
+    
     _pEffect->SetVertexBuffer(_pVBO, 0);
+    _pEffect->SetVertexBuffer(_pMatricesVBO, 1);
+    _pEffect->SetVertexBuffer(_pSceneDataVBO, 2);
+    
     _pEffect->SetFragmentTexture(_pTexture, 0);
     _pEffect->SetFragmentSamplerState(&_samplerState, 0);
     
@@ -186,7 +259,8 @@ static const float vertices[18] =
 
 - (void)_update
 {
-    
+    _rad += 0.01;
+    _cubeModel = glm::rotate(glm::mat4(1.0), _rad, glm::vec3(0,1,0));
 }
 
 // The main game loop called by the CADisplayLine timer
@@ -209,6 +283,8 @@ static const float vertices[18] =
     CGRect rect = [self.view bounds];
     _pDevice->OnResize(rect.size.width, rect.size.height);
     self.view.contentScaleFactor = [[UIScreen mainScreen] scale];
+    
+    _projection = glm::perspective(45.0f, (float)(rect.size.width)/(float)rect.size.height, 0.1f, 1000.0f);
 }
 
 @end

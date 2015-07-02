@@ -1,0 +1,522 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		FB560AEC1B394EF9000B7B1B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = FB560AEB1B394EF9000B7B1B /* main.m */; };
+		FB560AEF1B394EF9000B7B1B /* AppDelegate.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB560AEE1B394EF9000B7B1B /* AppDelegate.mm */; };
+		FB560AF71B394EF9000B7B1B /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FB560AF61B394EF9000B7B1B /* Images.xcassets */; };
+		FB560AFA1B394EF9000B7B1B /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = FB560AF81B394EF9000B7B1B /* LaunchScreen.xib */; };
+		FB560B061B394EF9000B7B1B /* MetalBeginTests.m in Sources */ = {isa = PBXBuildFile; fileRef = FB560B051B394EF9000B7B1B /* MetalBeginTests.m */; };
+		FB560B111B394F6C000B7B1B /* MTLGameViewController.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB560B101B394F6C000B7B1B /* MTLGameViewController.mm */; };
+		FB560B161B395EAD000B7B1B /* shader.metal in Sources */ = {isa = PBXBuildFile; fileRef = FB560B151B395EAD000B7B1B /* shader.metal */; };
+		FB560B1E1B3A8261000B7B1B /* MTLDevice.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB560B1C1B3A8261000B7B1B /* MTLDevice.mm */; };
+		FB560B271B3AA239000B7B1B /* MTLBuffer.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB560B261B3AA239000B7B1B /* MTLBuffer.mm */; };
+		FB560B311B3AADA8000B7B1B /* MTLTexture.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB560B2F1B3AADA8000B7B1B /* MTLTexture.mm */; };
+		FB560B351B3BE817000B7B1B /* MTLRenderPipeline.mm in Sources */ = {isa = PBXBuildFile; fileRef = FB560B331B3BE817000B7B1B /* MTLRenderPipeline.mm */; };
+		FBC98E691B3D2798001C4D0E /* EffectMTL.mm in Sources */ = {isa = PBXBuildFile; fileRef = FBC98E671B3D2798001C4D0E /* EffectMTL.mm */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		FB560B001B394EF9000B7B1B /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = FB560ADE1B394EF9000B7B1B /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = FB560AE51B394EF9000B7B1B;
+			remoteInfo = MetalBegin;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		FB560AE61B394EF9000B7B1B /* MetalBegin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MetalBegin.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB560AEA1B394EF9000B7B1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FB560AEB1B394EF9000B7B1B /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
+		FB560AED1B394EF9000B7B1B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
+		FB560AEE1B394EF9000B7B1B /* AppDelegate.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = AppDelegate.mm; sourceTree = "<group>"; };
+		FB560AF61B394EF9000B7B1B /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
+		FB560AF91B394EF9000B7B1B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
+		FB560AFF1B394EF9000B7B1B /* MetalBeginTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MetalBeginTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		FB560B041B394EF9000B7B1B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		FB560B051B394EF9000B7B1B /* MetalBeginTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MetalBeginTests.m; sourceTree = "<group>"; };
+		FB560B0F1B394F6C000B7B1B /* MTLGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLGameViewController.h; path = metal/MTLGameViewController.h; sourceTree = "<group>"; };
+		FB560B101B394F6C000B7B1B /* MTLGameViewController.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLGameViewController.mm; path = metal/MTLGameViewController.mm; sourceTree = "<group>"; };
+		FB560B151B395EAD000B7B1B /* shader.metal */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.metal; path = shader.metal; sourceTree = "<group>"; };
+		FB560B1C1B3A8261000B7B1B /* MTLDevice.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLDevice.mm; path = core/MTLDevice.mm; sourceTree = "<group>"; };
+		FB560B1D1B3A8261000B7B1B /* MTLDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLDevice.h; path = core/MTLDevice.h; sourceTree = "<group>"; };
+		FB560B251B3AA239000B7B1B /* MTLBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLBuffer.h; path = core/MTLBuffer.h; sourceTree = "<group>"; };
+		FB560B261B3AA239000B7B1B /* MTLBuffer.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLBuffer.mm; path = core/MTLBuffer.mm; sourceTree = "<group>"; };
+		FB560B2B1B3AA531000B7B1B /* DeviceMTL.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = DeviceMTL.h; path = core/DeviceMTL.h; sourceTree = "<group>"; };
+		FB560B2F1B3AADA8000B7B1B /* MTLTexture.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLTexture.mm; path = core/MTLTexture.mm; sourceTree = "<group>"; };
+		FB560B301B3AADA8000B7B1B /* MTLTexture.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLTexture.h; path = core/MTLTexture.h; sourceTree = "<group>"; };
+		FB560B321B3B95B7000B7B1B /* Graphics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Graphics.h; sourceTree = "<group>"; };
+		FB560B331B3BE817000B7B1B /* MTLRenderPipeline.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLRenderPipeline.mm; path = core/MTLRenderPipeline.mm; sourceTree = "<group>"; };
+		FB560B341B3BE817000B7B1B /* MTLRenderPipeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLRenderPipeline.h; path = core/MTLRenderPipeline.h; sourceTree = "<group>"; };
+		FBC98E671B3D2798001C4D0E /* EffectMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EffectMTL.mm; sourceTree = "<group>"; };
+		FBC98E681B3D2798001C4D0E /* EffectMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectMTL.h; sourceTree = "<group>"; };
+		FBDAFF531B41425800011081 /* shader.inl */ = {isa = PBXFileReference; lastKnownFileType = text; path = shader.inl; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		FB560AE31B394EF9000B7B1B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FB560AFC1B394EF9000B7B1B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		FB560ADD1B394EF9000B7B1B = {
+			isa = PBXGroup;
+			children = (
+				FB560AE81B394EF9000B7B1B /* MetalBegin */,
+				FB560B021B394EF9000B7B1B /* MetalBeginTests */,
+				FB560AE71B394EF9000B7B1B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		FB560AE71B394EF9000B7B1B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				FB560AE61B394EF9000B7B1B /* MetalBegin.app */,
+				FB560AFF1B394EF9000B7B1B /* MetalBeginTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		FB560AE81B394EF9000B7B1B /* MetalBegin */ = {
+			isa = PBXGroup;
+			children = (
+				FB560B171B3A7830000B7B1B /* graphics */,
+				FB560B141B395E9A000B7B1B /* shader */,
+				FB560B131B394F7B000B7B1B /* app */,
+				FB560B121B394F70000B7B1B /* metal */,
+				FB560AF61B394EF9000B7B1B /* Images.xcassets */,
+				FB560AF81B394EF9000B7B1B /* LaunchScreen.xib */,
+				FB560AE91B394EF9000B7B1B /* Supporting Files */,
+			);
+			path = MetalBegin;
+			sourceTree = "<group>";
+		};
+		FB560AE91B394EF9000B7B1B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FB560AEA1B394EF9000B7B1B /* Info.plist */,
+				FB560AEB1B394EF9000B7B1B /* main.m */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		FB560B021B394EF9000B7B1B /* MetalBeginTests */ = {
+			isa = PBXGroup;
+			children = (
+				FB560B051B394EF9000B7B1B /* MetalBeginTests.m */,
+				FB560B031B394EF9000B7B1B /* Supporting Files */,
+			);
+			path = MetalBeginTests;
+			sourceTree = "<group>";
+		};
+		FB560B031B394EF9000B7B1B /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				FB560B041B394EF9000B7B1B /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		FB560B121B394F70000B7B1B /* metal */ = {
+			isa = PBXGroup;
+			children = (
+				FB560B0F1B394F6C000B7B1B /* MTLGameViewController.h */,
+				FB560B101B394F6C000B7B1B /* MTLGameViewController.mm */,
+			);
+			name = metal;
+			sourceTree = "<group>";
+		};
+		FB560B131B394F7B000B7B1B /* app */ = {
+			isa = PBXGroup;
+			children = (
+				FB560AED1B394EF9000B7B1B /* AppDelegate.h */,
+				FB560AEE1B394EF9000B7B1B /* AppDelegate.mm */,
+			);
+			name = app;
+			sourceTree = "<group>";
+		};
+		FB560B141B395E9A000B7B1B /* shader */ = {
+			isa = PBXGroup;
+			children = (
+				FB560B151B395EAD000B7B1B /* shader.metal */,
+			);
+			name = shader;
+			sourceTree = "<group>";
+		};
+		FB560B171B3A7830000B7B1B /* graphics */ = {
+			isa = PBXGroup;
+			children = (
+				FB560B181B3A7843000B7B1B /* metal */,
+			);
+			name = graphics;
+			sourceTree = "<group>";
+		};
+		FB560B181B3A7843000B7B1B /* metal */ = {
+			isa = PBXGroup;
+			children = (
+				FB560B2F1B3AADA8000B7B1B /* MTLTexture.mm */,
+				FB560B301B3AADA8000B7B1B /* MTLTexture.h */,
+				FB560B251B3AA239000B7B1B /* MTLBuffer.h */,
+				FB560B261B3AA239000B7B1B /* MTLBuffer.mm */,
+				FB560B1C1B3A8261000B7B1B /* MTLDevice.mm */,
+				FB560B1D1B3A8261000B7B1B /* MTLDevice.h */,
+				FB560B2B1B3AA531000B7B1B /* DeviceMTL.h */,
+				FB560B321B3B95B7000B7B1B /* Graphics.h */,
+				FB560B331B3BE817000B7B1B /* MTLRenderPipeline.mm */,
+				FB560B341B3BE817000B7B1B /* MTLRenderPipeline.h */,
+				FBC98E671B3D2798001C4D0E /* EffectMTL.mm */,
+				FBC98E681B3D2798001C4D0E /* EffectMTL.h */,
+				FBDAFF531B41425800011081 /* shader.inl */,
+			);
+			name = metal;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		FB560AE51B394EF9000B7B1B /* MetalBegin */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FB560B091B394EF9000B7B1B /* Build configuration list for PBXNativeTarget "MetalBegin" */;
+			buildPhases = (
+				FB560AE21B394EF9000B7B1B /* Sources */,
+				FB560AE31B394EF9000B7B1B /* Frameworks */,
+				FB560AE41B394EF9000B7B1B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MetalBegin;
+			productName = MetalBegin;
+			productReference = FB560AE61B394EF9000B7B1B /* MetalBegin.app */;
+			productType = "com.apple.product-type.application";
+		};
+		FB560AFE1B394EF9000B7B1B /* MetalBeginTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = FB560B0C1B394EF9000B7B1B /* Build configuration list for PBXNativeTarget "MetalBeginTests" */;
+			buildPhases = (
+				FB560AFB1B394EF9000B7B1B /* Sources */,
+				FB560AFC1B394EF9000B7B1B /* Frameworks */,
+				FB560AFD1B394EF9000B7B1B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				FB560B011B394EF9000B7B1B /* PBXTargetDependency */,
+			);
+			name = MetalBeginTests;
+			productName = MetalBeginTests;
+			productReference = FB560AFF1B394EF9000B7B1B /* MetalBeginTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		FB560ADE1B394EF9000B7B1B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0630;
+				ORGANIZATIONNAME = phantom;
+				TargetAttributes = {
+					FB560AE51B394EF9000B7B1B = {
+						CreatedOnToolsVersion = 6.3.1;
+						DevelopmentTeam = TV9PN6QP9B;
+					};
+					FB560AFE1B394EF9000B7B1B = {
+						CreatedOnToolsVersion = 6.3.1;
+						TestTargetID = FB560AE51B394EF9000B7B1B;
+					};
+				};
+			};
+			buildConfigurationList = FB560AE11B394EF9000B7B1B /* Build configuration list for PBXProject "MetalBegin" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = FB560ADD1B394EF9000B7B1B;
+			productRefGroup = FB560AE71B394EF9000B7B1B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				FB560AE51B394EF9000B7B1B /* MetalBegin */,
+				FB560AFE1B394EF9000B7B1B /* MetalBeginTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		FB560AE41B394EF9000B7B1B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB560AFA1B394EF9000B7B1B /* LaunchScreen.xib in Resources */,
+				FB560AF71B394EF9000B7B1B /* Images.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FB560AFD1B394EF9000B7B1B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		FB560AE21B394EF9000B7B1B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB560B161B395EAD000B7B1B /* shader.metal in Sources */,
+				FB560AEF1B394EF9000B7B1B /* AppDelegate.mm in Sources */,
+				FB560B111B394F6C000B7B1B /* MTLGameViewController.mm in Sources */,
+				FB560B351B3BE817000B7B1B /* MTLRenderPipeline.mm in Sources */,
+				FB560B1E1B3A8261000B7B1B /* MTLDevice.mm in Sources */,
+				FB560B311B3AADA8000B7B1B /* MTLTexture.mm in Sources */,
+				FB560AEC1B394EF9000B7B1B /* main.m in Sources */,
+				FBC98E691B3D2798001C4D0E /* EffectMTL.mm in Sources */,
+				FB560B271B3AA239000B7B1B /* MTLBuffer.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		FB560AFB1B394EF9000B7B1B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				FB560B061B394EF9000B7B1B /* MetalBeginTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		FB560B011B394EF9000B7B1B /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = FB560AE51B394EF9000B7B1B /* MetalBegin */;
+			targetProxy = FB560B001B394EF9000B7B1B /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin PBXVariantGroup section */
+		FB560AF81B394EF9000B7B1B /* LaunchScreen.xib */ = {
+			isa = PBXVariantGroup;
+			children = (
+				FB560AF91B394EF9000B7B1B /* Base */,
+			);
+			name = LaunchScreen.xib;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		FB560B071B394EF9000B7B1B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		FB560B081B394EF9000B7B1B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.3;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		FB560B0A1B394EF9000B7B1B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"/Users/mengxin-macmini/Desktop/metal-adapter/metal-adpater/3\\#cube-sample/MetalBegin",
+				);
+				INFOPLIST_FILE = MetalBegin/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Debug;
+		};
+		FB560B0B1B394EF9000B7B1B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_OBJC_ARC = NO;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				HEADER_SEARCH_PATHS = (
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+					"/Users/mengxin-macmini/Desktop/metal-adapter/metal-adpater/3\\#cube-sample/MetalBegin",
+				);
+				INFOPLIST_FILE = MetalBegin/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Release;
+		};
+		FB560B0D1B394EF9000B7B1B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = MetalBeginTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MetalBegin.app/MetalBegin";
+			};
+			name = Debug;
+		};
+		FB560B0E1B394EF9000B7B1B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SDKROOT)/Developer/Library/Frameworks",
+					"$(inherited)",
+				);
+				INFOPLIST_FILE = MetalBeginTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MetalBegin.app/MetalBegin";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		FB560AE11B394EF9000B7B1B /* Build configuration list for PBXProject "MetalBegin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FB560B071B394EF9000B7B1B /* Debug */,
+				FB560B081B394EF9000B7B1B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FB560B091B394EF9000B7B1B /* Build configuration list for PBXNativeTarget "MetalBegin" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FB560B0A1B394EF9000B7B1B /* Debug */,
+				FB560B0B1B394EF9000B7B1B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		FB560B0C1B394EF9000B7B1B /* Build configuration list for PBXNativeTarget "MetalBeginTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				FB560B0D1B394EF9000B7B1B /* Debug */,
+				FB560B0E1B394EF9000B7B1B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = FB560ADE1B394EF9000B7B1B /* Project object */;
+}
