@@ -46,9 +46,16 @@ struct RenderPipelineMTL:public IGXRenderPipeline
     
     id<MTLRenderCommandEncoder>             m_renderCmdEncoder;
     
+    
+    IGXTex *                                m_pRenderTextures[4];
+    IGXTex *                                m_pDepthTexture;
+    
     bool Begin();
     bool End();
     void Release();
+    
+    IGXTex * GetDepthTexture() ;
+    IGXTex ** GetRenderTexures() ;
     
     void Init();
 };

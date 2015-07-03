@@ -87,7 +87,8 @@ void EffectMTL::SetFragmentTexture(IGXTex * _pTexture,GX_UINT32 _index)
 
 GX_BOOL EffectMTL::Begin()
 {
-    RenderPipelineMTL * pCurrentPipeline = (RenderPipelineMTL *)pGlobalDevice->GetCurrentRenderPipeline();
+    
+    RenderPipelineMTL * pCurrentPipeline = (RenderPipelineMTL *)internalDevice->GetCurrentRenderPipeline();
     id<MTLRenderCommandEncoder> encoder = pCurrentPipeline->m_renderCmdEncoder;
     // shader alpha 混合等
     [encoder setRenderPipelineState:this->renderPipelineState];

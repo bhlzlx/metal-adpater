@@ -19,6 +19,7 @@ struct ShaderMatrices
 {
     glm::mat4 model;
     glm::mat4 view;
+    glm::mat4 shadowView;
     glm::mat4 projection;
 };
 
@@ -79,6 +80,17 @@ const float __cube[8 * 36] =
     -1,1,1,		-1,0,0,	1,0
 };
 
+const float __plane[8 * 6] =
+{
+    -1,0,-1,	0,1,0, 0,1,
+    -1,0,1,		0,1,0, 0,0,
+    1,0,1,		0,1,0, 1,0,
+    
+    -1,0,-1,	0,1,0, 0,1,
+    1,0,1,		0,1,0, 1,0,
+    1,0,-1,		0,1,0, 1,1
+};
+
 @implementation MTLGameViewController
 {
     
@@ -91,7 +103,10 @@ const float __cube[8 * 36] =
     _pDepthStencil->Release();
     _pRenderTarget->Release();
     _pRenderPipeline->Release();
-    _pVBO->Release();
+    _pCubeVBO->Release();
+    _pPlaneVBO->Release();
+    _pPlaneMatricesVBO->Release();
+    _pCubeMatricesVBO->Release();
     [_timer release];
     [super dealloc];
 }
@@ -123,21 +138,17 @@ const float __cube[8 * 36] =
 
     static GX_RENDERTARGET_DESC         renderTargetDesc;
     static GX_DEPTH_STENCIL_DESC        depthStencilDesc;
-    static GX_TEX_DESC                  depthTexDesc;
+    
     static GX_EFFECT_DESC               effectDesc;
     
+    // 初始化 depthstencil 和  rendertarget
     depthStencilDesc.nWidth = rect.size.width * [[UIScreen mainScreen] scale];
     depthStencilDesc.nHeight = rect.size.height * [[UIScreen mainScreen] scale];
-    depthTexDesc.nWidth = rect.size.width * [[UIScreen mainScreen] scale];
-    depthTexDesc.nHeight = rect.size.height * [[UIScreen mainScreen] scale];
-    depthTexDesc.eFormat = GX_RAW_DEPTH;
-    depthStencilDesc.texture = _pDevice->CreateTextureDyn(GX_RAW_DEPTH, rect.size.width * [[UIScreen mainScreen] scale], rect.size.height * [[UIScreen mainScreen] scale]);
     _pDepthStencil = _pDevice->CreateDepthStencil(&depthStencilDesc);
     
     renderTargetDesc.eFormat = GX_RAW_RGBA8888;
     renderTargetDesc.nWidth = rect.size.width;
     renderTargetDesc.nHeight = rect.size.height;
-    renderTargetDesc.texture = nullptr;
     _pRenderTarget = _pDevice->CreateRenderTarget(&renderTargetDesc);
     
     GX_CLEAR clear;
@@ -148,34 +159,53 @@ const float __cube[8 * 36] =
     renderPipelineDesc.clearOp = clear;
     
     // 初始化pipeline
-    _pRenderPipeline = _pDevice->CreateDefaultRenderPipeline(&renderPipelineDesc);
-    _pDevice->SetCurrentRenderPipeline(_pRenderPipeline);
-    
-    const char * szShader =
-                #include "../shader.inl"
+    _pRenderPipeline = _pDevice->CreateRenderPipeline(&renderPipelineDesc);
+
+    const char * szNoramlRenderShader =
+                #include "../sceneRenderer.h"
     
     effectDesc.nSamplerStateCount = 0;
-    effectDesc.szLibrarySource = szShader;
+    effectDesc.szLibrarySource = szNoramlRenderShader;
     effectDesc.pSamplerState = nullptr;
 
+    _pDevice->SetCurrentRenderPipeline(_pRenderPipeline);
     _pEffect = _pDevice->CreateEffect(&effectDesc);
     
-    _pVBO = _pDevice->CreateVBO(__cube, sizeof(__cube));
-    _pMatricesVBO = _pDevice->CreateDynVBO(sizeof(ShaderMatrices));
-    _pSceneDataVBO = _pDevice->CreateDynVBO(sizeof(ShaderSceneData));
+    // 初始化shadow渲染需要的pipeline
+    const char * szDepthRenderShader =
+                #include "../shadowRenderer.h"
+    depthStencilDesc.nWidth = 1024;
+    depthStencilDesc.nHeight = 1024;
+    _pShadowRenderStencil = _pDevice->CreateDepthStencil(&depthStencilDesc);
+    renderPipelineDesc.pDepthStencil = _pShadowRenderStencil;
+    renderPipelineDesc.nRenderTargets = 0;
+    renderPipelineDesc.bMainPipeline = GX_FALSE;
     
+    _pShadowRenderPipeline = _pDevice->CreateRenderPipeline(&renderPipelineDesc);
+    
+    effectDesc.szLibrarySource = szDepthRenderShader;
+    _pDevice->SetCurrentRenderPipeline(_pShadowRenderPipeline);
+    _pShadowEffect = _pDevice->CreateEffect(&effectDesc);
+    
+    
+    // 初始化 模型所 需要的 VBO
+    _pCubeVBO = _pDevice->CreateVBO(__cube, sizeof(__cube));
+    _pPlaneVBO = _pDevice->CreateVBO(__plane, sizeof(__plane));
+    _pPlaneMatricesVBO = _pDevice->CreateDynVBO(sizeof(ShaderMatrices));
+    _pCubeMatricesVBO = _pDevice->CreateDynVBO(sizeof(ShaderMatrices));
+    _pSceneDataVBO = _pDevice->CreateDynVBO(sizeof(ShaderSceneData));
+    // 生成默认贴图
     _pTexture = _pDevice->CreateChessTexture();
+    // 处理纹理采样
     _samplerState.AddressU = GX_TEX_ADDRESS_REPEAT;
     _samplerState.AddressV = GX_TEX_ADDRESS_REPEAT;
     _samplerState.MagFilter = GX_TEX_FILTER_MIP_LINEAR;
     _samplerState.MinFilter = GX_TEX_FILTER_NEAREST;
     
-    
-
-    [self _setupMetal];
-    
     _rad = 0.0f;
     _cubeView = glm::lookAt(glm::vec3(10,5,10), glm::vec3(0,0,0), glm::vec3(0,1,0));
+    _shadowView = glm::lookAt(glm::vec3(0,10,5), glm::vec3(0,0,0), glm::vec3(0,1,0));
+    _planeModel = glm::translate( glm::scale(glm::mat4(1.0f), glm::vec3(4.0f,1.0f,4.0f)), glm::vec3(0.0f,-1.2f,0.0f));
     
     // _gameloop 会在每个runloop循环执行一次
     _timer = [CADisplayLink displayLinkWithTarget:self selector:@selector(_gameloop)];
@@ -188,35 +218,89 @@ const float __cube[8 * 36] =
 
 - (void)_render
 {
+    
     // context的texture是不断变化的，取当前有效的texture
     // 准备提交command buffer的互斥工作
     _pDevice->BeginDrawing();
+    static ShaderSceneData sceneData;
+    static ShaderMatrices matrices;
+    static GX_RECT viewport;
+    viewport.x = viewport.y = 0;
+    
+    viewport.dx = 1024;
+    viewport.dy = 1024;
+    //////// 渲染 深度 /////////
+    _pDevice->SetViewport(&viewport);
+    if( self->_pShadowRenderPipeline->Begin() == false || _pShadowEffect->Begin() == false)
+    {
+        _pDevice->EmptyFlush();
+        return;
+    }
+    
+    matrices.model = _cubeModel;
+    matrices.view =  _shadowView;
+    matrices.projection = _projection;
+    
+    _pCubeMatricesVBO->SetData(&matrices, sizeof(matrices));
+    
+    sceneData.light_pos = glm::vec4(0,10,5,1);
+    _pSceneDataVBO->SetData(&sceneData, sizeof(sceneData));
+    
+    _pShadowEffect->SetVertexBuffer(_pCubeVBO, 0);
+    _pShadowEffect->SetVertexBuffer(_pCubeMatricesVBO, 1);
+    _pShadowEffect->SetVertexBuffer(_pSceneDataVBO, 2);
+    
+    _pDevice->DrawPrimitives(GX_DRAW_TRIANGLE, 36, 1);
+    
+    
+    matrices.model = _planeModel;
+    _pPlaneMatricesVBO->SetData(&matrices, sizeof(matrices));
+    _pShadowEffect->SetVertexBuffer(_pPlaneVBO, 0);
+    _pShadowEffect->SetVertexBuffer(_pPlaneMatricesVBO, 1);
+    _pDevice->DrawPrimitives(GX_DRAW_TRIANGLE, 6, 1);
+    
+    _pShadowEffect->End();
+    _pShadowRenderPipeline->End();
+    
+    
+    viewport.dx = self.view.bounds.size.width * screenScale;
+    viewport.dy = self.view.bounds.size.height * screenScale;
+    _pDevice->SetViewport(&viewport);
+    //////// 渲染 场景 /////////
     // 判断当前程序资源的有效性，如果无效则
+
     if(_pRenderPipeline->Begin() == false || _pEffect->Begin() == false)
     {
         _pDevice->EmptyFlush();
         return;
     }
     
-    ShaderMatrices matrices ;
-    matrices.model = _cubeModel;
-    matrices.view = _cubeView;
-    matrices.projection = _projection;
-    _pMatricesVBO->SetData(&matrices, sizeof(matrices));
+    matrices.model          = _cubeModel;
+    matrices.view           = _cubeView;
+    matrices.shadowView     = _shadowView;
+    matrices.projection     = _projection;
     
-    ShaderSceneData sceneData;
-    sceneData.light_pos = glm::vec4(10,5,10,1);
+    _pCubeMatricesVBO->SetData(&matrices, sizeof(matrices));
+    
+    sceneData.light_pos = glm::vec4(5,10,0,1);
     _pSceneDataVBO->SetData(&sceneData, sizeof(sceneData));
     
-    _pEffect->SetVertexBuffer(_pVBO, 0);
-    _pEffect->SetVertexBuffer(_pMatricesVBO, 1);
+    _pEffect->SetVertexBuffer(_pCubeVBO, 0);
+    _pEffect->SetVertexBuffer(_pCubeMatricesVBO, 1);
     _pEffect->SetVertexBuffer(_pSceneDataVBO, 2);
     
     _pEffect->SetFragmentTexture(_pTexture, 0);
+    _pEffect->SetFragmentTexture(_pShadowRenderPipeline->GetDepthTexture(), 1);
     _pEffect->SetFragmentSamplerState(&_samplerState, 0);
     
+    _pDevice->DrawPrimitives(GX_DRAW_TRIANGLE, 36, 1);
     
-    _pDevice->DrawPrimitives(GX_DRAW_TRIANGLE, 3, 1);
+    
+    matrices.model = _planeModel;
+    _pPlaneMatricesVBO->SetData(&matrices, sizeof(matrices));
+    _pEffect->SetVertexBuffer(_pPlaneVBO, 0);
+    _pEffect->SetVertexBuffer(_pPlaneMatricesVBO, 1);
+    _pDevice->DrawPrimitives(GX_DRAW_TRIANGLE, 6, 1);
 
     _pEffect->End();
     _pRenderPipeline->End();
@@ -284,7 +368,7 @@ const float __cube[8 * 36] =
     _pDevice->OnResize(rect.size.width, rect.size.height);
     self.view.contentScaleFactor = [[UIScreen mainScreen] scale];
     
-    _projection = glm::perspective(45.0f, (float)(rect.size.width)/(float)rect.size.height, 0.1f, 1000.0f);
+    _projection = glm::perspective(45.0f, (float)(rect.size.width)/(float)rect.size.height, 0.1f, 20.0f);
 }
 
 @end

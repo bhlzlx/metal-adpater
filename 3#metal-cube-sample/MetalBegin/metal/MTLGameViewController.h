@@ -17,24 +17,30 @@
     
     IGXRenderTarget*        _pRenderTarget;
     IGXDepthStencil*        _pDepthStencil;
-    
     IGXRenderPipeline*      _pRenderPipeline;
     
-    IGXVB     *             _pVBO;
-    IGXVB*                  _pMatricesVBO;
+    IGXRenderTarget*        _pShadowRenderTarget;
+    IGXDepthStencil*        _pShadowRenderStencil;
+    IGXRenderPipeline*      _pShadowRenderPipeline;
+    IGXEffect*              _pShadowEffect;
+    
+    IGXVB*                  _pCubeVBO;
+    IGXVB*                  _pPlaneVBO;
+    IGXVB*                  _pPlaneMatricesVBO;
+    IGXVB*                  _pCubeMatricesVBO;
     IGXVB*                  _pSceneDataVBO;
     
     BOOL                    _layerSizeShouldUpdate;
     
     // 时间调度相关数据结构
     CADisplayLink *         _timer;
-    BOOL                    _gameLoopPaused;
-    dispatch_semaphore_t    _inflight_semaphore;
-    
     //
     glm::mat4               _cubeModel;
     glm::mat4               _cubeView;
+    glm::mat4               _planeModel;
+    
     glm::mat4               _projection;
+    glm::mat4               _shadowView;
     float                   _rad;
 }
 

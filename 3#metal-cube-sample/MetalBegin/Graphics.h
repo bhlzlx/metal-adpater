@@ -32,6 +32,8 @@ typedef long long           GX_INT64;
 
 #define SHADER_TEXT(text) #text
 
+class IGXTex;
+
 struct GX_RECT
 {
     GX_UINT16   x,y,dx,dy;
@@ -157,6 +159,8 @@ struct IGXRenderPipeline
 {
     virtual bool Begin() = 0;
     virtual bool End() = 0;
+    virtual IGXTex * GetDepthTexture() = 0;
+    virtual IGXTex ** GetRenderTexures() = 0;
     virtual void Release() = 0;
 };
 
@@ -249,8 +253,6 @@ struct IGXEffect
 // 我们的深度，模板缓冲区一律为 24bit 8bit,所以这里就不写像素类型描述了
 struct GX_DEPTH_STENCIL_DESC
 {
-    IGXTex  * texture;
-    
     GX_UINT16 nWidth;
     GX_UINT16 nHeight;
 };
@@ -258,8 +260,6 @@ struct GX_DEPTH_STENCIL_DESC
 // 渲染缓冲区需要指定像素格式
 struct GX_RENDERTARGET_DESC
 {
-    IGXTex *  texture;
-    
     GX_UINT16 nWidth;
     GX_UINT16 nHeight;
     
@@ -325,8 +325,8 @@ struct IGXDevice
     
     virtual IGXRenderTarget * CreateRenderTarget(GX_RENDERTARGET_DESC * _pDesc) = 0;
     virtual IGXDepthStencil * CreateDepthStencil(GX_DEPTH_STENCIL_DESC * _pDesc) = 0;
-    virtual IGXRenderPipeline * CreateCustomRenderPipeline(GX_RENDERPIPELINE_DESC * _pDesc) = 0;
-    virtual IGXRenderPipeline * CreateDefaultRenderPipeline(GX_RENDERPIPELINE_DESC * _pDesc) = 0;
+    
+    virtual IGXRenderPipeline * CreateRenderPipeline(GX_RENDERPIPELINE_DESC * _pDesc) = 0;
     
     virtual void SetCurrentRenderPipeline(IGXRenderPipeline * pipeline) = 0;
     

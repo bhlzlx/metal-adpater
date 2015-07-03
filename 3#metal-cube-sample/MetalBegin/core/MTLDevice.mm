@@ -329,7 +329,7 @@ GX_BOOL DeviceMTL::DrawPrimitives(GX_DRAW _drawMode,GX_UINT32 _NumVertices, GX_U
     RenderPipelineMTL * pipeline = (RenderPipelineMTL * )this->GetCurrentRenderPipeline();
     [pipeline->m_renderCmdEncoder drawPrimitives:PrimitiveType2MTL(_drawMode)
                                      vertexStart:0
-                                     vertexCount:36
+                                     vertexCount:_NumVertices
                                    instanceCount:_NumInstance];
     return GX_TRUE;
 }
@@ -339,15 +339,11 @@ void DeviceMTL::SetCurrentRenderPipeline(IGXRenderPipeline * pipeline)
     this->m_pCurrentPipeline = pipeline;
 }
 
-IGXRenderPipeline * DeviceMTL::CreateCustomRenderPipeline(GX_RENDERPIPELINE_DESC * _pDesc)
-{
-    return nullptr;
-}
-
-IGXRenderPipeline * DeviceMTL::CreateDefaultRenderPipeline(GX_RENDERPIPELINE_DESC * _pDesc)
+IGXRenderPipeline * DeviceMTL::CreateRenderPipeline(GX_RENDERPIPELINE_DESC * _pDesc)
 {
     RenderPipelineMTL * pRenderPipeline = new RenderPipelineMTL();
-    pRenderPipeline->m_bDefaultPipeline = GX_TRUE;
+    
+    pRenderPipeline->m_bDefaultPipeline = _pDesc->bMainPipeline;
     
     assert(internalDevice->m_metalLayer != nil);
     
@@ -393,6 +389,11 @@ IGXEffect* DeviceMTL::CreateEffect(GX_EFFECT_DESC * _pDesc)
     {
         RenderTargetMTL * pRenderTarget = (RenderTargetMTL *)renderPipeline->m_desc.pRenderTargets[i];
         pipelineDesc.colorAttachments[i].pixelFormat =  PixelFormat2MTL(pRenderTarget->desc.eFormat);
+    }
+    
+    if (renderPipeline->m_desc.nRenderTargets == 0)
+    {
+        pipelineDesc.colorAttachments[0].pixelFormat = MTLPixelFormatInvalid;
     }
 
 //#############

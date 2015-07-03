@@ -70,9 +70,6 @@ struct DeviceMTL : public IGXDevice
     
     IGXRenderPipeline * CreateRenderPipeline(GX_RENDERPIPELINE_DESC * _pDesc);
     
-    IGXRenderPipeline * CreateCustomRenderPipeline(GX_RENDERPIPELINE_DESC * _pDesc);
-    IGXRenderPipeline * CreateDefaultRenderPipeline(GX_RENDERPIPELINE_DESC * _pDesc);
-    
     IGXEffect* CreateEffect(GX_EFFECT_DESC * _pDesc);
     
     GX_BOOL DrawIndexed( GX_DRAW _drawMode, IGXIB * _pIB, GX_UINT32 _NumVertices, GX_UINT32  _NumInstance );

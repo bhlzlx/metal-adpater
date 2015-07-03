@@ -55,9 +55,10 @@
 		FB560B321B3B95B7000B7B1B /* Graphics.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Graphics.h; sourceTree = "<group>"; };
 		FB560B331B3BE817000B7B1B /* MTLRenderPipeline.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = MTLRenderPipeline.mm; path = core/MTLRenderPipeline.mm; sourceTree = "<group>"; };
 		FB560B341B3BE817000B7B1B /* MTLRenderPipeline.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MTLRenderPipeline.h; path = core/MTLRenderPipeline.h; sourceTree = "<group>"; };
+		FB6FC0EF1B46620B00347089 /* shadowRenderer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = shadowRenderer.h; sourceTree = "<group>"; };
+		FB6FC0F01B46844900347089 /* sceneRenderer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = sceneRenderer.h; sourceTree = "<group>"; };
 		FBC98E671B3D2798001C4D0E /* EffectMTL.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = EffectMTL.mm; sourceTree = "<group>"; };
 		FBC98E681B3D2798001C4D0E /* EffectMTL.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EffectMTL.h; sourceTree = "<group>"; };
-		FBDAFF531B41425800011081 /* shader.inc */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.pascal; path = shader.inc; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -185,7 +186,8 @@
 				FB560B341B3BE817000B7B1B /* MTLRenderPipeline.h */,
 				FBC98E671B3D2798001C4D0E /* EffectMTL.mm */,
 				FBC98E681B3D2798001C4D0E /* EffectMTL.h */,
-				FBDAFF531B41425800011081 /* shader.inc */,
+				FB6FC0EF1B46620B00347089 /* shadowRenderer.h */,
+				FB6FC0F01B46844900347089 /* sceneRenderer.h */,
 			);
 			name = metal;
 			sourceTree = "<group>";
